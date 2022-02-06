@@ -3,11 +3,6 @@ const mysql = require("mysql2");
 const inquirer = require("inquirer");
 require("console.table");
 
-
-
-
-
-
 // Get all employees
 const allEmployees = () => {
     const sql = `SELECT * FROM employee`;
