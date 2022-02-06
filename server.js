@@ -44,7 +44,7 @@ const allEmployees = () => {
 
 // Get single employee
 const singleEmployee = () => {
-    const sql = `SELECT * FROM candidates WHERE id = ?`;
+    const sql = `SELECT * FROM employees WHERE id = ?`;
     const params = [req.params.id];
   
     db.query(sql, params, (err, row) => {
@@ -59,7 +59,7 @@ const singleEmployee = () => {
 
 // Delete employee
 const deleteEmployee = () => {
-    const sql = `DELETE FROM candidates WHERE id = ?`;
+    const sql = `DELETE FROM employees WHERE id = ?`;
     const params = [req.params.id];
   
     db.query(sql, params, (err, result) => {
