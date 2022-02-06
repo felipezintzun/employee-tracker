@@ -20,5 +20,10 @@
   "homepage": "https://github.com/felipezintzun/employee-tracker#readme",
   "devDependencies": {
     "jest": "^27.5.0"
+  },
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3"
   }
 }
