@@ -3,6 +3,21 @@ const mysql = require("mysql2");
 const inquirer = require("inquirer");
 require("console.table");
 
+
+// Get all departments
+const allDepartments = () => {
+    const sql =  `SELECT * FROM deapartment`;
+
+    db.query(sql, (err, res)=> {
+        if (err) { 
+            throw err;
+        
+        } else {
+        console.table(rows);
+        }
+    });
+}
+
 // Get all employees
 const allEmployees = () => {
     const sql = `SELECT * FROM employee`;
@@ -97,33 +112,51 @@ const initialPrompt = () => {
             name: "task",
             message: "What are you looking to do?",
             choices: [
-                "View Employees",
-                // "View Employees by Department",
-                "Add Employee",
-                "Remove Employees",
-                "Update Employee Role",
-                "Add Role",
+                "View All Departments",
+                "View All Roles",
+                "View All Employees",
+                "Add a Department",
+                "Add a Role",
+                "Add an Employee",
+                "Update an Employee Role",
                 "End"]
-        }
-    ]).then((response) => {
-        switch (response.task) {
-            case "View Employees":
+        },
+    ]).then((response) => {      
+            switch (response.choices) {
+              case 'View all Departments':
+                allDepartments();
+                break;
+      
+              case 'View all Roles':
+                allRoles();
+                break;
+      
+              case 'View all Employees':
                 allEmployees();
                 break;
-            case "Add Employee":
-                createEmployee();
+      
+              case 'Add a Department':
+                addDept();
                 break;
-            case "Remove Employees":
-                deleteEmployees();
+      
+              case 'Add a Role':
+                addRole();
                 break;
-            case "Update Employee Role":
-            default:
+      
+              case 'Add an Employee':
+                addEmployee();
+                break;
+      
+              case 'Update an Employee Role':
+                updateEmployeeRole();
+                break;
+      
+            default: 
                 db.end()
                 process.exit(0)
-
-        }
-    })
-}
+            }
+          });
+      };
 
 // Connect to database
 const db = mysql.createConnection(
