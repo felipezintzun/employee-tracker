@@ -20,9 +20,8 @@ const allDepartments = () => {
 }
 
 // Get all roles
-// Get all departments
 const allRoles = () => {
-    const sql = `SELECT * FROM roles`;
+    const sql = `SELECT * FROM role`;
 
     db.query(sql, (err, res) => {
         if (err) {
@@ -52,43 +51,68 @@ const allEmployees = () => {
 }
 
 // Get single employee
-const singleEmployee = () => {
-    const sql = `SELECT * FROM employees WHERE id = ?`;
-    const params = [req.params.id];
+// const singleEmployee = () => {
+//     const sql = `SELECT * FROM employees WHERE id = ?`;
+//     const params = [req.params.id];
 
-    db.query(sql, params, (err, row) => {
-        if (err) {
-            throw err;
-        } else {
-            console.table(rows);
-            initialPrompt()
-        }
-    });
-};
+//     db.query(sql, params, (err, row) => {
+//         if (err) {
+//             throw err;
+//         } else {
+//             console.table(rows);
+//             initialPrompt()
+//         }
+//     });
+// };
 
 // Delete employee
-const deleteEmployee = () => {
-    const sql = `DELETE FROM employees WHERE id = ?`;
-    const params = [req.params.id];
+// const deleteEmployee = () => {
+//     const sql = `DELETE FROM employees WHERE id = ?`;
+//     const params = [req.params.id];
+
+//     db.query(sql, params, (err, result) => {
+//         if (err) {
+//             res.statusMessage(400).json({
+//                 error: res.message
+//             });
+//         } else if (!result.affectedRows) {
+//             res.json({
+//                 message: 'Candidate not found'
+//             });
+//         } else {
+//             res.json({
+//                 message: 'deleted',
+//                 changes: result.affectedRows,
+//                 id: req.params.id
+//             });
+//         }
+//     });
+// };
+
+
+// Add Department
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type:"input",
+            name:"department_name",
+            message:"Enter Department Name"
+        }
+    ]).then(response => {
+
+    const sql = `INSERT INTO department (name) VALUES (?);`;
+    const params = response.department_name;
 
     db.query(sql, params, (err, result) => {
         if (err) {
-            res.statusMessage(400).json({
-                error: res.message
-            });
-        } else if (!result.affectedRows) {
-            res.json({
-                message: 'Candidate not found'
-            });
-        } else {
-            res.json({
-                message: 'deleted',
-                changes: result.affectedRows,
-                id: req.params.id
-            });
+            throw err
         }
+        console.table (result)
+        initialPrompt()
     });
+});
 };
+
 
 // Create employee
 const createEmployee = () => {
@@ -159,7 +183,7 @@ const initialPrompt = () => {
                 break;
 
             case 'Add a Department':
-                addDept();
+                addDepartment();
                 break;
 
             case 'Add a Role':
@@ -167,7 +191,7 @@ const initialPrompt = () => {
                 break;
 
             case 'Add an Employee':
-                addEmployee();
+                createEmployee();
                 break;
 
             case 'Update an Employee Role':
