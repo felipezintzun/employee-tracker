@@ -113,42 +113,78 @@ const addDepartment = () => {
 });
 };
 
+// Add Role 
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type:"input",
+            name:"title",
+            message:"Enter Role Title"
+        },
+        {
+            type:"input",
+            name:"salary",
+            message:"Enter Salary"
+        },
+        {
+            type:"input",
+            name:"department_id",
+            message:"Enter Department ID"
+        }
+    ]).then(response => {
 
-// Create employee
-const createEmployee = () => {
-    const errors = inputCheck(
-        body,
-        'first_name',
-        'last_name',
-        'industry_connected'
-    );
-    if (errors) {
-        res.status(400).json({
-            error: errors
-        });
-        return;
-    }
-
-    const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
-      VALUES (?,?,?)`;
-    const params = [body.first_name, body.last_name, body.industry_connected];
+    const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?);`;
+    const params = [response.title, response.salary, response.department_id]
 
     db.query(sql, params, (err, result) => {
         if (err) {
-            res.status(400).json({
-                error: err.message
-            });
-            return;
+            throw err
         }
-        res.json({
-            message: 'success',
-            data: body
-        });
+        console.table (result)
+        initialPrompt()
     });
+});
 };
 
 
+// Create employee
+const createEmployee = () => {
+    inquirer.prompt([ 
+         {
+            type:"input",
+            name:"first_name",
+            message:"Enter First Name"
+        },
+        {
+            type:"input",
+            name:"last_name",
+            message:"Enter Last Name"
+        },
+      
+        {
+            type:"input",
+            name:"role_id",
+            message:"Enter Role ID"
+        },
+        {
+            type:"input",
+            name:"manager_id",
+            message:"Enter Manager ID"
+        }
+    ]).then(response => {
 
+    const sql = `INSERT INTO employee (first_name, last_name, role_id,manager_id) VALUES (?,?,?,?);`;
+    const params = [response.first_name, response.last_name, response.role_id, response.manager_id]
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            throw err
+        }
+        console.table (result)
+        initialPrompt()
+    });
+});
+};
 
 // Prompts user to select action 
 const initialPrompt = () => {
