@@ -186,6 +186,36 @@ const createEmployee = () => {
 });
 };
 
+// Update Employee Role
+const updateEmployeeRole = () => {
+    inquirer.prompt([ 
+         {
+            type:"input",
+            name:"employee_id",
+            message:"Enter Employee ID"
+        },
+        {
+            type:"input",
+            name:"role_id",
+            message:"Enter New Role ID"
+        },
+
+    ]).then(response => {
+
+    const sql = `UPDATE employee SET role_id = ? WHERE id = ? ;`;
+    const params = [response.role_id, response.employee_id]
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            throw err
+        }
+        console.table (result)
+        initialPrompt()
+    });
+});
+};
+
+
 // Prompts user to select action 
 const initialPrompt = () => {
 
