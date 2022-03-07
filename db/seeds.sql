@@ -1,3 +1,5 @@
+use employee_tracker;
+
 INSERT INTO department (name)
 VALUES ("Athlete");
 INSERT INTO department (name)

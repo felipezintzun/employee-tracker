@@ -6,14 +6,31 @@ require("console.table");
 
 // Get all departments
 const allDepartments = () => {
-    const sql =  `SELECT * FROM deapartment`;
+    const sql = `SELECT * FROM department`;
 
-    db.query(sql, (err, res)=> {
-        if (err) { 
+    db.query(sql, (err, res) => {
+        if (err) {
             throw err;
-        
+
         } else {
-        console.table(rows);
+            console.table(res);
+            initialPrompt()
+        }
+    });
+}
+
+// Get all roles
+// Get all departments
+const allRoles = () => {
+    const sql = `SELECT * FROM roles`;
+
+    db.query(sql, (err, res) => {
+        if (err) {
+            throw err;
+
+        } else {
+            console.table(res);
+            initialPrompt()
         }
     });
 }
@@ -56,7 +73,9 @@ const deleteEmployee = () => {
 
     db.query(sql, params, (err, result) => {
         if (err) {
-            res.statusMessage(400).json({ error: res.message });
+            res.statusMessage(400).json({
+                error: res.message
+            });
         } else if (!result.affectedRows) {
             res.json({
                 message: 'Candidate not found'
@@ -80,7 +99,9 @@ const createEmployee = () => {
         'industry_connected'
     );
     if (errors) {
-        res.status(400).json({ error: errors });
+        res.status(400).json({
+            error: errors
+        });
         return;
     }
 
@@ -90,7 +111,9 @@ const createEmployee = () => {
 
     db.query(sql, params, (err, result) => {
         if (err) {
-            res.status(400).json({ error: err.message });
+            res.status(400).json({
+                error: err.message
+            });
             return;
         }
         res.json({
@@ -106,69 +129,68 @@ const createEmployee = () => {
 // Prompts user to select action 
 const initialPrompt = () => {
 
-    inquirer.prompt([
-        {
-            type: "list",
-            name: "task",
-            message: "What are you looking to do?",
-            choices: [
-                "View All Departments",
-                "View All Roles",
-                "View All Employees",
-                "Add a Department",
-                "Add a Role",
-                "Add an Employee",
-                "Update an Employee Role",
-                "End"]
-        },
-    ]).then((response) => {      
-            switch (response.choices) {
-              case 'View all Departments':
+    inquirer.prompt([{
+        type: "list",
+        name: "task",
+        message: "What are you looking to do?",
+        choices: [
+            "View All Departments",
+            "View All Roles",
+            "View All Employees",
+            "Add a Department",
+            "Add a Role",
+            "Add an Employee",
+            "Update an Employee Role",
+            "End"
+        ]
+    }, ]).then((response) => {
+        switch (response.task) {
+            case 'View All Departments':
+                console.log("View Departments")
                 allDepartments();
                 break;
-      
-              case 'View all Roles':
+
+            case 'View All Roles':
                 allRoles();
                 break;
-      
-              case 'View all Employees':
+
+            case 'View All Employees':
                 allEmployees();
                 break;
-      
-              case 'Add a Department':
+
+            case 'Add a Department':
                 addDept();
                 break;
-      
-              case 'Add a Role':
+
+            case 'Add a Role':
                 addRole();
                 break;
-      
-              case 'Add an Employee':
+
+            case 'Add an Employee':
                 addEmployee();
                 break;
-      
-              case 'Update an Employee Role':
+
+            case 'Update an Employee Role':
                 updateEmployeeRole();
                 break;
-      
-            default: 
+
+            default:
                 db.end()
                 process.exit(0)
-            }
-          });
-      };
+        }
+    });
+};
 
 // Connect to database
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        // Your MySQL username,
-        user: 'root',
-        // Your MySQL password
-        password: 'Jellyfish93$',
-        database: 'employee_tracker'
-    })
-    db.connect( () => {
-        console.log('Connected to the election database.')
-        initialPrompt()
-    })
+const db = mysql.createConnection({
+    host: 'localhost',
+    // Your MySQL username,
+    user: 'root',
+    // Your MySQL password
+    password: 'Jellyfish93$',
+    database: 'employee_tracker'
+})
+db.connect(() => {
+    console.log('Connected to the election database.')
+    initialPrompt()
+})
